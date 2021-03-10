@@ -35,19 +35,21 @@ app.whenReady().then(createWindow);
 
 // すべての ウィンドウ が閉じたときの処理
 app.on('window-all-closed', () => {
-  app.on('will-quit', () => {
-    console.log('= before-quit =========================');
-
-    (async () => {
-        (await psList()).forEach((el: string) => console.log(el));
-    })();
-
-  });
-
   if (process.platform !== 'darwin') {
     app.quit();
   }
 });
+
+app.on('will-quit', (event) => {
+  event.preventDefault();
+  (async () => {
+      (await psList()).forEach(
+        (el: string) => console.log(JSON.parse(el)['pid']));
+  })();
+
+  app.quit();
+});
+
 
 app.on('activate', () => {
   // macOS では、ウインドウが閉じてもメインプロセスは停止せず
