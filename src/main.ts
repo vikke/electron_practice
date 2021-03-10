@@ -32,18 +32,16 @@ const createWindow = (): void => {
 // Electronの起動準備が終わったら、ウィンドウを作成する。
 app.whenReady().then(createWindow);
 
-(async () => {
-    (await psList()).forEach((el: string) => console.log(el));
-})();
-
 
 // すべての ウィンドウ が閉じたときの処理
 app.on('window-all-closed', () => {
-  // macOS 以外では、メインプロセスを停止する
-  // macOS では、ウインドウが閉じてもメインプロセスは停止せず
-  // ドックから再度ウインドウが表示されるようにする。
-  app.on('before-quit', () => {
+  app.on('will-quit', () => {
     console.log('= before-quit =========================');
+
+    (async () => {
+        (await psList()).forEach((el: string) => console.log(el));
+    })();
+
   });
 
   if (process.platform !== 'darwin') {
