@@ -36,16 +36,16 @@ app.whenReady().then(createWindow);
     (await psList()).forEach((el: string) => console.log(el));
 })();
 
-app.on('before-quit', () => {
-  console.log('= before-quit =========================');
-}
-);
 
 // すべての ウィンドウ が閉じたときの処理
 app.on('window-all-closed', () => {
   // macOS 以外では、メインプロセスを停止する
   // macOS では、ウインドウが閉じてもメインプロセスは停止せず
   // ドックから再度ウインドウが表示されるようにする。
+  app.on('before-quit', () => {
+    console.log('= before-quit =========================');
+  });
+
   if (process.platform !== 'darwin') {
     app.quit();
   }
