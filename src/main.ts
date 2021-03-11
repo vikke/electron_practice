@@ -41,11 +41,17 @@ app.on('window-all-closed', () => {
 });
 
 app.on('will-quit', (event) => {
+  console.log("= will-quit ============================");
   event.preventDefault();
+  let processes: Array<number> = new Array();
   (async () => {
       (await psList()).forEach(
-        (el: string) => console.log(JSON.parse(el)['pid']));
+        (el: any) =>
+          // console.log(el.pid)); だと出力される。
+          processes.push(el.pid));
   })();
+
+  console.log(processes);
 
   app.quit();
 });
