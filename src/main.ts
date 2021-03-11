@@ -45,10 +45,14 @@ app.on('will-quit', (event) => {
   event.preventDefault();
   let processes: Array<number> = new Array();
   (async () => {
-      (await psList()).forEach(
-        (el: any) =>
-          // console.log(el.pid)); だと出力される。
-          processes.push(el.pid));
+    (await psList()).forEach(
+      (el: any) => {
+        let reg = /ruby/;
+        if (reg.test(el.cmd)){
+          console.log(el); // だと出力される。
+          process.kill(el.pid, 'SIGTERM');
+        }
+      })
   })();
 
   console.log(processes);
