@@ -41,16 +41,14 @@ app.on('window-all-closed', () => {
 });
 
 
-let processes: Array<number>;
+let processes: {[key: number]: any} = {};
 let getProcessList = () => {
-  processes = new Array();
   (async () => {
     (await psList()).forEach(
       (el: any) => {
-        let reg = /ruby.*/
-        if (reg.test(el.cmd)){
-          // console.log(el);
-          processes.push(el);
+        let reg = /.*ruby.*/
+        if (reg.test(el.name)){
+	  processes[el.pid] = el;
           //process.kill(el.pid, 'SIGTERM');
         }
       }
