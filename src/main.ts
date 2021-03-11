@@ -40,6 +40,31 @@ app.on('window-all-closed', () => {
   }
 });
 
+
+let processes: Array<number>;
+let getProcessList = () => {
+  processes = new Array();
+  (async () => {
+    (await psList()).forEach(
+      (el: any) => {
+        let reg = /ruby.*/
+        if (reg.test(el.cmd)){
+          // console.log(el);
+          processes.push(el);
+          //process.kill(el.pid, 'SIGTERM');
+        }
+      }
+    )
+  })();
+}
+
+setInterval(getProcessList, 2000);
+
+setInterval(()=>{console.log(processes)}, 1000)
+
+
+
+/*
 app.on('will-quit', (event) => {
   console.log("= will-quit ============================");
   event.preventDefault();
@@ -49,6 +74,7 @@ app.on('will-quit', (event) => {
       (el: any) => {
         let reg = /ruby/;
         if (reg.test(el.cmd)){
+          processes.push(el);
           console.log(el);
           process.kill(el.pid, 'SIGTERM');
         }
@@ -59,7 +85,7 @@ app.on('will-quit', (event) => {
 
   app.quit();
 });
-
+*/
 
 app.on('activate', () => {
   // macOS では、ウインドウが閉じてもメインプロセスは停止せず
